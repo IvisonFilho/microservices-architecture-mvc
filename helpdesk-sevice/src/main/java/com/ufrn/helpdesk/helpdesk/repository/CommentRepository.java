@@ -1,0 +1,11 @@
+package com.ufrn.helpdesk.helpdesk.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.ufrn.helpdesk.helpdesk.model.Comment;
+
+@Repository
+public interface CommentRepository extends JpaRepository<Comment,Long>{
+    
+}

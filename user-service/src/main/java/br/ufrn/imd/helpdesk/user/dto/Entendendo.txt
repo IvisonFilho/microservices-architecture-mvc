@@ -1,0 +1,5 @@
+DTOs servem para conversar entre microserviços
+Mapper faz a ponte entre Entity -> DTO -> Entity
+
+Isso é para não expor informações relevantes de um serviço com outro.
+Entenda que eles são independentes. 
