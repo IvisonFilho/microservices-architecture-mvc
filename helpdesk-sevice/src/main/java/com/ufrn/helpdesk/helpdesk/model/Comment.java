@@ -18,6 +18,7 @@ public class Comment {
     private Long id;
     private String author;
     private String message;
+    private boolean activated;
     private LocalDateTime dateTime;
     @ManyToOne
     @JoinColumn(name = "ticket_id")

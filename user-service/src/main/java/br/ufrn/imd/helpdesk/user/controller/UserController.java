@@ -16,7 +16,7 @@ import br.ufrn.imd.helpdesk.user.service.UserService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
@@ -27,7 +27,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public UserResponseDTO createUser(@RequestBody @Valid UserRequestDTO userRequest){
         return userService.createUser(userRequest);
     }

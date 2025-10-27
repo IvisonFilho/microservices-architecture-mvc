@@ -25,7 +25,7 @@ public class Ticket {
     private Long userId;
     
     @Column(nullable = false)
-    private String tittle;
+    private String title;
     
     @Column(nullable = false)
     private String description;
@@ -40,6 +40,8 @@ public class Ticket {
     
     @Column(nullable = false)
     private String status;
+
+    private boolean active;
     
     @Column(nullable = false)
     private LocalDateTime dateTime;

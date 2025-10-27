@@ -1,0 +1,44 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ServiceDiscoveryApplication<service-discovery>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.ufrn.imd.service_discovery.ServiceDiscoveryApplication",
+            "projectName": "service-discovery",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-UserServiceApplication<user-service>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "br.ufrn.imd.helpdesk.user.UserServiceApplication",
+            "projectName": "user-service",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-HelpdeskSeviceApplication<helpdesk-sevice>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.ufrn.helpdesk.helpdesk.HelpdeskSeviceApplication",
+            "projectName": "helpdesk-sevice",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-GatewayApplication<gateway>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.ufrn.imd.gateway.GatewayApplication",
+            "projectName": "gateway",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
