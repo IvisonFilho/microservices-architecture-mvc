@@ -2,15 +2,10 @@ package com.ufrn.helpdesk.helpdesk.controller;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.stereotype.Controller;
 
 import com.ufrn.helpdesk.helpdesk.dto.TicketRequestDTO;
 import com.ufrn.helpdesk.helpdesk.dto.TicketResponseDTO;
@@ -18,41 +13,40 @@ import com.ufrn.helpdesk.helpdesk.service.TicketService;
 
 import jakarta.validation.Valid;
 
-
-
-@RestController
-@RequestMapping("/ticket")
+@Controller
 public class TicketController {
-    
+
     private final TicketService ticketService;
 
-    public TicketController(TicketService ticketService){
+    public TicketController(TicketService ticketService) {
         this.ticketService = ticketService;
     }
-    @GetMapping("/{ticket-id}")
-    public ResponseEntity<TicketResponseDTO> getTicket(@PathVariable("ticket-id") Long ticketId) {
-        return ResponseEntity.ok(ticketService.findByIdTicket(ticketId));
+
+    // Queries
+    @QueryMapping
+    public TicketResponseDTO getTicket(@Argument Long id) {
+        return ticketService.findByIdTicket(id);
     }
 
-    @GetMapping("/tickets/{user-id}")
-    public ResponseEntity<List<TicketResponseDTO>> getAllTickets(@PathVariable("user-id") Long userId) {
-        return ResponseEntity.ok(ticketService.findAll(userId));
-    }
-    
-    
-    @PostMapping("/create")
-    public ResponseEntity<TicketResponseDTO> createTicket(@Valid @RequestBody TicketRequestDTO ticketRequestDTO){
-        return ResponseEntity.status(201).body(ticketService.createTicket(ticketRequestDTO));
+    @QueryMapping
+    public List<TicketResponseDTO> getAllTickets(@Argument Long userId) {
+        return ticketService.findAll(userId);
     }
 
-    @PutMapping("/update/{ticket-id}")
-    public ResponseEntity<TicketResponseDTO> updateTicket(@PathVariable("ticket-id") Long ticketId, @Valid @RequestBody TicketRequestDTO ticketRequestDTO){
-        return ResponseEntity.ok(ticketService.updateTicket(ticketId, ticketRequestDTO));
+    // Mutations
+    @MutationMapping
+    public TicketResponseDTO createTicket(@Argument("ticket") @Valid TicketRequestDTO ticketRequestDTO) {
+        return ticketService.createTicket(ticketRequestDTO);
     }
-    
-    @DeleteMapping("/delete/{ticket-id}")
-    public ResponseEntity<Void> deleteTicket(@PathVariable("ticket-id") Long ticketId){
-        ticketService.deleteTicket(ticketId);
-        return ResponseEntity.noContent().build();
+
+    @MutationMapping
+    public TicketResponseDTO updateTicket(@Argument Long id, @Argument("ticket") @Valid TicketRequestDTO ticketRequestDTO) {
+        return ticketService.updateTicket(id, ticketRequestDTO);
+    }
+
+    @MutationMapping
+    public Boolean deleteTicket(@Argument Long id) {
+        ticketService.deleteTicket(id);
+        return true;
     }
 }

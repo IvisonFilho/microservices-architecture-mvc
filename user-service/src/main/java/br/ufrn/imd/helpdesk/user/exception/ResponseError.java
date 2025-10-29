@@ -8,10 +8,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ResponseError {
-    
-    int status;
-    String message;
-    String description;
-    Date date;
-
+    private int status;
+    private String message;
+    private String description;
+    private Date date;
 }

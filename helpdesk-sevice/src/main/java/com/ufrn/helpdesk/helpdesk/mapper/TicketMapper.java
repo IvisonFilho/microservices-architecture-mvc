@@ -17,7 +17,7 @@ public class TicketMapper {
     }
 
     public static TicketResponseDTO toResponseDTO(Ticket ticket){
-        TicketResponseDTO ticketResponseDTO = new TicketResponseDTO(ticket.getId(),ticket.getTitle(),ticket.getDescription(),ticket.getVisibility(),ticket.getStatus(),ticket.getDateTime());
+        TicketResponseDTO ticketResponseDTO = new TicketResponseDTO(ticket.getId(),ticket.getTitle(),ticket.getDescription(),ticket.getVisibility(),ticket.getStatus(),ticket.getCategoryIA(),ticket.getDateTime());
     
         return ticketResponseDTO;
     }

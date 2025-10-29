@@ -7,45 +7,48 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.ufrn.imd.helpdesk.user.dto.UserRequestDTO;
 import br.ufrn.imd.helpdesk.user.dto.UserResponseDTO;
-import br.ufrn.imd.helpdesk.user.repository.UserRepository;
 import br.ufrn.imd.helpdesk.user.model.UserEntity;
+import br.ufrn.imd.helpdesk.user.repository.UserRepository;
 
 @Service
 public class UserService {
+
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository){
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-    
-    public UserResponseDTO createUser(UserRequestDTO userRequest){
-        UserEntity user = new UserEntity();
 
+    // Criar usuário
+    public UserResponseDTO createUser(UserRequestDTO userRequest) {
+        UserEntity user = new UserEntity();
         user.setName(userRequest.name());
         user.setPassword(userRequest.password());
         user.setEmail(userRequest.email());
         user.setAddress(userRequest.address());
 
         UserEntity saveUser = userRepository.save(user);
-
         return new UserResponseDTO(saveUser.getId(), saveUser.getName(), saveUser.getEmail());
     }
 
-    public ResponseEntity<UserResponseDTO> getUserEntity(Long id){
-        //Aparentemente somente userRepository retorna um Option<objeto> , mas o orElseThrow desencapsula ele.
-        UserEntity user = userRepository.findById(id).orElseThrow(()-> new RuntimeException("user does not exist"));
+    // Buscar usuário por ID
+    public ResponseEntity<UserResponseDTO> getUserEntity(Long id) {
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist"));
 
-        UserResponseDTO userResponseDTO = new UserResponseDTO(user.getId(),user.getName(),user.getEmail());
-
+        UserResponseDTO userResponseDTO = new UserResponseDTO(user.getId(), user.getName(), user.getEmail());
         return ResponseEntity.ok(userResponseDTO);
     }
 
-    public ResponseEntity<UserResponseDTO> updateUser(Long id, UserRequestDTO userRequestUpdate){
+    // Atualizar usuário
+    public ResponseEntity<UserResponseDTO> updateUser(Long id, UserRequestDTO userRequestUpdate) {
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist"));
 
-        UserEntity user = userRepository.findById(id).orElseThrow(()-> new RuntimeException("user does not exist"));
-        
-        if(!user.getEmail().equals(userRequestUpdate.email()) && userRepository.existsByEmail(userRequestUpdate.email())){
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "email already in use");
+        // Checa se email já está em uso por outro usuário
+        if (!user.getEmail().equals(userRequestUpdate.email()) 
+                && userRepository.existsByEmail(userRequestUpdate.email())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already in use");
         }
 
         user.setName(userRequestUpdate.name());
@@ -53,23 +56,22 @@ public class UserService {
         user.setPassword(userRequestUpdate.password());
         user.setAddress(userRequestUpdate.address());
 
-        UserEntity saveUser = userRepository.save(user);
-
-        UserResponseDTO userResponseDTO = new UserResponseDTO(saveUser.getId(),saveUser.getName(),saveUser.getEmail());
+        UserEntity updatedUser = userRepository.save(user);
+        UserResponseDTO userResponseDTO = new UserResponseDTO(updatedUser.getId(), updatedUser.getName(), updatedUser.getEmail());
 
         return ResponseEntity.ok(userResponseDTO);
     }
 
-    public ResponseEntity<Void> deleteUser(Long id){
+    // Deletar (inativar) usuário
+    public ResponseEntity<Void> deleteUser(Long id) {
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist"));
 
-        UserEntity user = userRepository.findById(id).orElseThrow(()-> new RuntimeException("User does not exist"));
-
-        if(!user.isActive()){
-            throw new RuntimeException("User does not exist");
+        if (!user.isActive()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User already inactive");
         }
 
         user.setActive(false);
-
         userRepository.save(user);
 
         return ResponseEntity.noContent().build();

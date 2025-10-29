@@ -84,7 +84,7 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId).orElseThrow(()->new ResourceNotFoundException("Comment is not found"));
 
         if(!comment.isActivated()){
-            new ResourceNotFoundException("Comment is not activates");
+            throw new ResourceNotFoundException("Comment is not activates");
         }
 
         comment.setActivated(false);

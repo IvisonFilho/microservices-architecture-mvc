@@ -32,7 +32,6 @@ public class Ticket {
     
     private String priority; //Microsserviço de IA
     
-    @Transient
     private String categoryIA; //Microsserviço de IA
     
     @Column(nullable = false)

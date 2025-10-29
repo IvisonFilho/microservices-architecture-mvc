@@ -8,6 +8,7 @@ public record TicketResponseDTO(
     String description,
     String visibility,
     String status,
+    String categoryIA,
     LocalDateTime dateTime
 ) {
     

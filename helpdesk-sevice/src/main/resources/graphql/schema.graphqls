@@ -1,0 +1,47 @@
+"=================== TICKET ==================="
+type Ticket {
+  id: ID!
+  description: String
+  status: String
+  categoryIA: String
+  dateTime: String
+}
+
+input TicketRequestInput {
+  userId: ID!
+  title: String!
+  description: String!
+  visibility: String!
+}
+
+"=================== COMMENT ==================="
+type Comment {
+  id: ID!
+  author: String!
+  message: String!
+  dateTime: String
+}
+
+input CommentRequestInput {
+  author: String!
+  message: String!
+}
+
+"=================== QUERIES ==================="
+type Query {
+  getTicket(id: ID!): Ticket
+  getAllTickets(userId: ID!): [Ticket]
+  getComment(id: ID!): Comment
+  getComments(ticketId: ID!): [Comment]
+}
+
+"=================== MUTATIONS ==================="
+type Mutation {
+  createTicket(ticket: TicketRequestInput!): Ticket
+  updateTicket(id: ID!, ticket: TicketRequestInput!): Ticket
+  deleteTicket(id: ID!): Boolean
+
+  createComment(ticketId: ID!, comment: CommentRequestInput!): Comment
+  updateComment(id: ID!, comment: CommentRequestInput!): Comment
+  deleteComment(id: ID!): Boolean
+}
